@@ -1,0 +1,238 @@
+rom mpv import MPV
+import time
+import socket
+
+class mpvplayer():
+     
+    def base_init(self, fullscreen=True, loop_playlist='1'): 
+        self.player = MPV()
+        self.on_stop = 0                #проверка на то запущен ли mpv, переделать по человечески!
+        self.pause_time = -1
+        self.fade_in = False
+        self.fade_out = False
+        self.fade_duration = 0.2
+        
+        #property's
+        try:
+            self.player.loop_playlist = loop_playlist                   # режим воспроизведения: inf - по кругу бесконечное число раз. 1,2... - заданное количество раз
+        except:
+            print(time.strftime("%Y.%m.%d - %H:%M:%S", time.localtime()), 'EXCEPT wrong parametr loop_playlist')
+            self.player.loop_playlist = '1'
+            
+        self.player._set_property("cursor-autohide", "always")          # прячем курсор
+        self.player._set_property("geometry", "640x480+1280+50")         # размер и позиция окна воспроизведения
+        
+        try:
+            self.player._set_property("fullscreen", fullscreen)                # полноэкранный режим
+        except:
+            print(time.strftime("%Y.%m.%d - %H:%M:%S", time.localtime()), '=====> wrong parametr fullscreen <=====')
+            self.player._set_property("fullscreen", True)
+            
+        self.player._set_property("ontop", True)                        # поверх всех окон
+        self.player._set_property("volume", 100)                        # громкость плеера
+        self.player._set_property("image-display-duration", "inf")      # если файл картинка - крутить его бесконечно
+        self.player._set_property("border", 'no')                       # окно воспроизведения без рамок
+        self.player._set_property("keep-open", 'yes')                   # не закрывать плеер, если текущий файл последний в плейлисте
+                         
+    def mute_left_channel(self):
+        if self.on_stop == 0:
+            print(time.strftime("%Y.%m.%d - %H:%M:%S", time.localtime()), '=====> mute left channel')
+            self.player._set_property("af", "lavfi=[pan='stereo|c0=c0']") 
+                   
+    def mute_right_channel(self):
+        if self.on_stop == 0:
+            print(time.strftime("%Y.%m.%d - %H:%M:%S", time.localtime()), '=====> mute right channel')
+            self.player._set_property("af", "lavfi=[pan='stereo|c1=c1']")   
+                
+    def unmute_channel(self):  
+        if self.on_stop == 0:
+            print(time.strftime("%Y.%m.%d - %H:%M:%S", time.localtime()), '=====> unmute channel')
+            self.player._set_property("af", "lavfi=[pan='stereo|c0=c0|c1=c1']") 
+        
+    def get_time_pos(self):  
+        if self.on_stop == 0:
+            return self.player._get_property("time-pos")  
+
+    def send_time_pos(self):  
+        if self.on_stop == 0:
+            TCP_IP_1 = '10.8.0.116'
+            TCP_PORT = 5005
+            MESSAGE = 'time:'+str(time.time())+':time_pos:' + str(self.player._get_property("time-pos")) + ':playlist-pos:' + str(self.player._get_property('playlist-pos')) 
+            try:
+                s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                s.connect((TCP_IP_1, TCP_PORT))  
+                s.send(bytes(MESSAGE, 'utf-8'))
+                s.close()
+            except:
+                print('Connection failed!')
+      
+    def pause(self):  
+        if self.on_stop == 0:
+            self.player._set_property("pause", True)  
+            print(time.strftime("%Y.%m.%d - %H:%M:%S", time.localtime()), '=====> pause') 
+    
+    # если стоит видео на паузе очень долго, часов 10, то после этого не отмирает по команде и нужно перезапусить mpv процесс (    
+    def unpause(self):
+        if self.on_stop == 0:  
+            self.player._set_property("pause", False) 
+            print(time.strftime("%Y.%m.%d - %H:%M:%S", time.localtime()), '=====> unpause')
+            # проверим, отжалась-ли пауза
+            a = self.player._get_property("time-pos") 
+            time.sleep(0.5)
+            b = self.player._get_property("time-pos") 
+            if (b - a) < 0.25: 
+                print(time.strftime("%Y.%m.%d - %H:%M:%S", time.localtime()), 'EXCEPT unpause fail')
+                return False
+            return True
+        
+    def stop(self):
+        if self.on_stop == 0:  
+            print(time.strftime("%Y.%m.%d - %H:%M:%S", time.localtime()), '=====> stop paly and terminate player')
+            self.player.terminate()
+            self.on_stop = 1
+    
+    # немедленно воспроизвести указанный файл. Возможно с фейдом
+    # если указано время - будет играть файл и вставать каждый раз на паузу в указанное время    
+    def play_file(self, file, timetopause=-1, fade_in=False):
+        if self.on_stop == 0:
+            try:
+                self.pause_time = float(timetopause)
+            except:
+                self.pause_time = -1
+            self.fade_in = fade_in
+            print(time.strftime("%Y.%m.%d - %H:%M:%S", time.localtime()), '=====> play file ',file)
+            self.player._set_property("pause", False)            
+            self.player.play(file)
+            if self.pause_time >= 0:
+                if self.fade_in:
+                    if self.pause_time >= self.fade_duration:
+                        self.player._set_property("vf", "fade=t=in:st=0:d="+str(self.fade_duration))
+                    else:
+                        self.player._set_property("vf", "fade=t=in:st=0:d="+str(self.pause_time))             
+                @self.player.event_callback('FILE_LOADED')
+                def on_start_file(event):
+                    time_pos_now = 0
+                    while float(time_pos_now) < self.pause_time:
+                        time_pos_now = self.player._get_property("time-pos")
+                    print(time.strftime("%Y.%m.%d - %H:%M:%S", time.localtime()), '=====> pause on ', self.player._get_property("time-pos"))
+                    if self.pause_time >= 0:                                    # Костыль! нужно сделать вместо этого unregister
+                        self.player._set_property("pause", True)
+            else:
+                try:
+                    on_start_file.unregister_mpv_events()
+                except:
+                    print(time.strftime("%Y.%m.%d - %H:%M:%S", time.localtime()), 'EXCEPT callback на начало файла не установлен')
+                if self.fade_in:
+                    self.player._set_property("vf", "fade=t=in:st=0:d="+str(self.fade_duration))
+                    
+            time.sleep(self.fade_duration+1)        
+            self.player.command("vf", "clr", "")
+            
+
+    # плавно c фейдом перейти на заданное время от начала видео и встать на паузу. Если время не задано просто встать на паузу с фейдом.
+    # Эта функция в конце очистит все установленные видеофильтры!  
+    # переделать на просто goto! с возможностью не вставать на паузу  
+    def goto_and_pause(self, timepos_pause=-1, fade_out=False):
+        if (self.on_stop == 0) & (not(self.player._get_property("pause"))):
+            try:
+                timepos = float(timepos_pause)
+            except:
+                timepos = -1
+            print(time.strftime("%Y.%m.%d - %H:%M:%S", time.localtime()), '=====> goto ', str(timepos_pause), ' and pause')
+            
+            if fade_out:
+                currframe =  self.player._get_property("time-pos")
+                self.player._set_property("vf", "fade=type=out:start_time="+str(currframe)+":duration="+str(self.fade_duration))
+                time.sleep(self.fade_duration)
+                if timepos >= 0:    
+                    if timepos >= self.fade_duration:
+                        self.player._set_property("vf", "fade=t=in:st="+str(timepos-0.5)+":d="+str(self.fade_duration))
+                        self.player.command("seek", timepos-self.fade_duration, "absolute")
+                        time.sleep(self.fade_duration)
+                    else:
+                        self.player._set_property("vf", "fade=t=in:st=0:d="+str(timepos))
+                        self.player.command("seek", '0', "absolute")
+                        time.sleep(timepos)
+                self.player.command("vf", "clr", "")
+                          
+            self.player._set_property("pause", True)   
+            
+    # Затемнить экран и встать на паузу        
+    # Эта функция в конце очистит все установленные видеофильтры!    
+    def fadeout_and_pause(self):
+        if (self.on_stop == 0) & (not(self.player._get_property("pause"))):
+            print(time.strftime("%Y.%m.%d - %H:%M:%S", time.localtime()), '=====> fadeout_and_pause')
+            currframe =  self.player._get_property("time-pos")
+            self.player._set_property("vf", "fade=type=out:start_time="+str(currframe)+":duration="+str(self.fade_duration))
+            time.sleep(self.fade_duration)
+            self.player._set_property("pause", True) 
+            self.player.command("vf", "clr", "")
+    
+    
+    # создать и начать воспроизведение плейлиста с параметрами зацикливания всего плейлиста и первого файла в нем                                   
+    def play_playlist(self,  files=[], loop_playlist='1', loop_first_file='1'):
+        if self.on_stop == 0:
+            print(time.strftime("%Y.%m.%d - %H:%M:%S", time.localtime()), '=====> play playlist')    
+            try:
+                count = (len(files))
+                tik = 0
+                while tik < count:
+                    print(time.strftime("%Y.%m.%d - %H:%M:%S", time.localtime()), str(files[tik]))
+                    self.player.playlist_append(str(files[tik]))      
+                    tik += 1      
+            except:
+                print(time.strftime("%Y.%m.%d - %H:%M:%S", time.localtime()), 'EXCEPT wrong files')
+                                                                                    
+            try:
+                self.player.loop_playlist = loop_playlist                   # режим воспроизведения: inf - по кругу бесконечное число раз. 1,2... - заданное количество раз
+            except:
+                print(time.strftime("%Y.%m.%d - %H:%M:%S", time.localtime()), 'EXCEPT wrong parametr loop_playlist')
+                self.player.loop_playlist = '1'
+            
+            if loop_first_file == 'inf':   
+                @self.player.event_callback('FILE_LOADED')
+                def on_end_file(event):                
+                    if self.player._get_property('playlist-pos') == 0:
+                        try:
+                            self.player.loop_file = loop_first_file
+                            print(time.strftime("%Y.%m.%d - %H:%M:%S", time.localtime()), '=====> play loop file num ', str(self.player._get_property('playlist-pos')))
+                        except:
+                            print(time.strftime("%Y.%m.%d - %H:%M:%S", time.localtime()), 'EXCEPT loop file wrong parametr num', str(loop_first_file))
+                    else:
+                        self.player.loop_file = '0'
+                        print(time.strftime("%Y.%m.%d - %H:%M:%S", time.localtime()), '=====> one time play file num', str(self.player._get_property('playlist-pos')))
+    
+    
+    # немедленно воспроизвести файл с указанным номером из плейлиста. С фейдом или без. Нумерация с 0 
+    def play_playlist_file(self, number='0', fade=False):
+        if self.on_stop == 0:
+            try:
+                num = int(number)
+            except:
+                print(time.strftime("%Y.%m.%d - %H:%M:%S", time.localtime()), 'EXCEPT number file in playlist incorrect', str(number))   
+            
+            
+            
+            
+            
+            
+            if fade:
+                currframe = self.player._get_property("time-pos")
+                self.player._set_property("vf", "fade=type=out:start_time="+str(currframe)+":duration="+str(self.fade_duration))
+                time.sleep(self.fade_duration)
+                self.player._set_property("pause", True) 
+                self.player._set_property("vf", "fade=t=in:st=0:d="+str(self.fade_duration))
+                print(time.strftime("%Y.%m.%d - %H:%M:%S", time.localtime()), '=====> fade play file number ', str(num), ' in playlist')
+                self.player._set_property('playlist-pos', num)
+                self.player._set_property("pause", False) 
+                time.sleep(self.fade_duration+1)
+                self.player.command("vf", "clr", "")
+            else:
+                print(time.strftime("%Y.%m.%d - %H:%M:%S", time.localtime()), '=====> play file num ', str(num), ' in playlist')     
+                self.player._set_property('playlist-pos', num)
+
+                    
+                
+    def get_playlist_pos(self):
+        return self.player._get_property('playlist-pos')
+            
