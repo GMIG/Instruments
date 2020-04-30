@@ -70,9 +70,9 @@ vid.start()
 
 def fadeBackgroundAndPlay(int filenum):
     vid.splayer.fade(1)
-    def playStory(x):
-        vid.start(int filenum)
-    vid.splayer.caller.on_faded(playStory)
+    def playFileNum():
+        vid.start(filenum)
+    vid.splayer.caller.on_faded(playFileNum)
     
 vid.start()
 def startVideo(key):
