@@ -15,8 +15,10 @@
 - main, который работает как LoopPlayer
 ### Настраиваем простой проигрыватель файлов
 Код, который по очереди по кругу проигрывает файлы drop.avi,  bird.avi
-    from mpv_simple import LoopPlayer 
-    vid = LoopPlayer('vid')
-    vid.names.append('drop.avi')
-    vid.names.append('bird.avi')
-    vid.start()
+```
+from mpv_simple import LoopPlayer 
+vid = LoopPlayer('vid')
+vid.names.append('drop.avi')
+vid.names.append('bird.avi')
+vid.start()
+```
