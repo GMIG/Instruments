@@ -14,11 +14,46 @@
 - авторан скрипт
 - main, который работает как LoopPlayer
 ### Настраиваем простой проигрыватель файлов
-Код, который по очереди по кругу проигрывает файлы drop.avi,  bird.avi
+Код, который по очереди по кругу проигрывает файлы drop.avi,  bird.avi.
+Чтобы закрыть проигрыватель нажмите ESC
 ```
 from mpv_simple import LoopPlayer 
 vid = LoopPlayer('vid')
 vid.names.append('drop.avi')
 vid.names.append('bird.avi')
 vid.start()
+```
+Вот что делает каждая строчка (в перспективе - построчно)
+```
+vid = LoopPlayer('vid')
+```
+Создаем объект vid. В аргументе `LoopPlayer` - буквенный идентификатор, который будет отображаться в консоли отладки
+```
+vid.names.append('drop.avi')
+```
+`vid.names` - массив (array) строк с именами файлов, которые будут последовательно проигрываться. Его можно редактировать во время проигрывания. 
+```
+vid.start()
+```
+запускает проигрыватель. У проигрывателя нет режима "стоп". Если нужно показать черный экран - просто делаем картинку с черным экраном в jpeg и  добавляем его в `vid.names`
+
+### Управляем файлами с клавиатуры
+Для того, чтобы по нажатию клавиши `1` запускался файл `drop.avi`, а по нажатию `2` - `bird.avi`
+```
+from mpv_simple import LoopPlayer 
+vid = LoopPlayer('vid')
+vid.names.append('drop.avi')
+vid.names.append('bird.avi')
+vid.start()
+
+def on_press(key):
+    logging.debug(key)
+    if key.char == '1':
+        vid.start(1)
+    if key.char == '2':
+        vid.start(2)
+    if key.char in ['1','2']:
+        fakeArduino.runFunction(str(key.char))
+listener = keyboard.Listener(on_press=on_press)
+listener.start()
 ```
