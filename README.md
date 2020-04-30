@@ -46,14 +46,10 @@ vid.names.append('drop.avi')
 vid.names.append('bird.avi')
 vid.start()
 
-def on_press(key):
+def startVideo(key):
     logging.debug(key)
-    if key.char == '1':
-        vid.start(1)
-    if key.char == '2':
-        vid.start(2)
     if key.char in ['1','2']:
-        vid.start(str(key.char))
-listener = keyboard.Listener(on_press=on_press)
+        vid.start(int(key.char))
+listener = keyboard.Listener(on_press=startVideo)
 listener.start()
 ```
