@@ -53,7 +53,7 @@ def on_press(key):
     if key.char == '2':
         vid.start(2)
     if key.char in ['1','2']:
-        fakeArduino.runFunction(str(key.char))
+        vid.start(str(key.char))
 listener = keyboard.Listener(on_press=on_press)
 listener.start()
 ```
