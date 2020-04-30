@@ -41,15 +41,19 @@ vid.start()
 Для того, чтобы по нажатию клавиши `1` запускался файл `drop.avi`, а по нажатию `2` - `bird.avi`
 ```
 from mpv_simple import LoopPlayer 
+from pynput import keyboard
+
 vid = LoopPlayer('vid')
 vid.names.append('drop.avi')
 vid.names.append('bird.avi')
 vid.start()
 
 def startVideo(key):
-    logging.debug(key)
+    logging.debug(str(key))
     if key.char in ['1','2']:
         vid.start(int(key.char))
 listener = keyboard.Listener(on_press=startVideo)
 listener.start()
 ```
+<добавить описание keyboard>
+`vid.start(int(key.char))` запускает
