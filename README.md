@@ -34,8 +34,15 @@
 3. Компьютерный монитор. Подойдет ваш обычный рабочий монитор, но удобнее иметь еще один.
 4. Провод между Raspberry PI и монитором. У Raspberry PI 4 разъем для монитора называется micro HDMI. Какой разъем у вашего монитора? 
 
-<div align="center">Если HDMI <img src="https://i.imgur.com/Dri4ET1.png" height="100">, то вам нужен провод micro HDMI-HDMI <img src="https://i.imgur.com/yJT8veQ.jpg" height="100">. 
-Если монитор у вас старый и разъем у него VGA <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/SVGA_port.jpg/1200px-SVGA_port.jpg" height="100">, то кроме провода micro HDMI-HDMI вам понадобится переходник hdmi-VGA. Все это можно купить в том же магазине.</div>
+Если HDMI - <img src="https://i.imgur.com/Dri4ET1.png" height="100">, 
+
+то вам нужен провод micro HDMI-HDMI <img src="https://i.imgur.com/yJT8veQ.jpg" height="100">. 
+
+Если монитор у вас старый и разъем у него VGA <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/SVGA_port.jpg/1200px-SVGA_port.jpg" height="100">,
+
+то кроме провода micro HDMI-HDMI вам понадобится переходник hdmi-VGA. 
+
+Все это можно купить в том же магазине.
 
 5. Мышка и клавиатура. Оба должны подключаться по USB <img src="https://i.imgur.com/4n2uyX0.png" height="100">
 6. microSD карта 16 GB. Лучше всего выбирать одну из [этих](https://maker.pro/raspberry-pi/tutorial/what-micro-sd-card-is-best-for-a-raspberry-pi-4).
@@ -70,13 +77,16 @@ https://projects.raspberrypi.org/en/projects/raspberry-pi-setting-up/1
 
 Эта та самая linux консоль, которая фигурирует в сериалах про хакеров. 
 
-5. Ввести команду `sudo ./install.sh`
+5. Ввести команду `sudo ./install.sh`. Теперь если вы видите `такой прямоугольник` это код. Его нужно куда-то вводить.
+6. Если все прошло хорошо, то вы увидите вот это окно
+![Thonny]()
+## Учимся программировать за 5 минут
 
-## Устанавливаем на Raspbrry PI Инструменты
+Откройте linux консоль сверху и напишите там `pipenv run python Main.py`. 
 
+Что это значит - пока не важно. Главное что перед вами запустилось странное видео.
 
-
-## Настраиваем простой проигрыватель файлов
+### Настраиваем простой проигрыватель файлов
 Код, который по очереди по кругу проигрывает файлы drop.avi,  bird.avi.
 Чтобы закрыть проигрыватель нажмите ESC
 ```
@@ -145,4 +155,3 @@ def startVideo(key):
 listener = keyboard.Listener(on_press=startVideo)
 listener.start()
 ```
-
