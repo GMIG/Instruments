@@ -6,11 +6,11 @@ from function_caller import FunctionCaller
 from tcp_receiver import TCPReceiver
 import os
 import psutil
- 
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
     logging.debug('logging')
- 
+
     def checkProcess():
         for proc in psutil.process_iter():
             logging.debug(proc.name()+' ' +str(proc.pid) +' '+ str(os.getpid()))
@@ -29,14 +29,14 @@ if __name__ == "__main__":
         os.popen('sh /home/pi/autorun.sh')
         return 'ok'
     def osRestart():
-        #os.system("sudo reboot")
+        os.system("sudo reboot")
         return
     def delayedSend(x):
         def f(x):
             fact.sendAll("somevent")
         reactor.callLater(3.5, f, "hello, world")
- 
- 
+
+
     dem = FunctionCaller("dem")
     dem.on_init(checkProcess)
     dem.on_check(checkProcess)
@@ -44,9 +44,12 @@ if __name__ == "__main__":
     dem.on_switch_on(runProcess)
     dem.on_restart(osRestart)
     dem.on_ds(delayedSend)
- 
+
     fact = TCPReceiver(8007)
     fact.parts[dem.name]=dem
     fact.begin()
- 
+
     reactor.run()
+
+
+

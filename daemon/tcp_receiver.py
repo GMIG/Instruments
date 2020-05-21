@@ -13,6 +13,7 @@ import re
 class TCPReceiverProtocol(LineReceiver):
     def __init__(self, factory ):
         LineReceiver.__init__(self)
+        self.delimiter=b'\r'
         self.__factory=factory
         self.__parts=factory.parts
         #Observable.__init__(self, 'tcp')
@@ -32,6 +33,7 @@ class TCPReceiverProtocol(LineReceiver):
         
     def connectionLost(self, reason):
         self.__factory.receivers.discard(self)
+        logging.debug('disconnected')
         LineReceiver.connectionLost(self, reason)
         
     def rawDataReceived(self, data):
@@ -42,6 +44,7 @@ class TCPReceiverProtocol(LineReceiver):
         logging.debug( datab)
         #return
         data = str(datab, 'ascii')
+        logging.debug('received'+data)        
         try:
             matches = self.__commandRE.match(data)
             if matches == None:

@@ -28,14 +28,11 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=2
-FILE_NAME_0=949;Python;0;EUTF-8;0;0;0;%2Fhome%2Fpi%2Fdaemon%2FdaemonMain.py;0;4
+current_page=0
+FILE_NAME_0=0;Python;0;EUTF-8;0;0;0;%2Fhome%2Fpi%2Fdaemon%2FdaemonMain.py;0;4
 FILE_NAME_1=164;None;0;EUTF-8;1;1;0;%2Fhome%2Fpi%2Fdaemon%2FPipfile;0;4
 FILE_NAME_2=232;Python;0;EUTF-8;0;1;0;%2Fhome%2Fpi%2Fdaemon%2Ffunction_caller.py;0;4
-FILE_NAME_3=2135;Python;0;EUTF-8;0;1;0;%2Fhome%2Fpi%2Fdaemon%2Ftcp_receiver.py;0;4
-FILE_NAME_4=361;Python;0;EUTF-8;0;1;0;%2Fhome%2Fpi%2Fmain%2FMain.py;0;4
-FILE_NAME_5=103;None;0;EUTF-8;0;1;0;%2Fhome%2Fpi%2Fmain%2FPipfile;0;4
-FILE_NAME_6=63;Sh;0;EUTF-8;0;1;0;%2Fhome%2Fpi%2Fautorun.sh;0;4
+FILE_NAME_3=415;Python;0;EUTF-8;0;1;0;%2Fhome%2Fpi%2Fdaemon%2Ftcp_receiver.py;0;4
 
 [VTE]
 last_dir=/home/pi
