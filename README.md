@@ -34,7 +34,7 @@
 3. Компьютерный монитор. Подойдет ваш обычный рабочий монитор, но удобнее иметь еще один.
 4. Провод между Raspberry PI и монитором. У Raspberry PI 4 разъем для монитора называется micro HDMI. Какой разъем у вашего монитора? 
 
-<div style="text-align:center">Если HDMI <img src="https://i.imgur.com/Dri4ET1.png" height="100">, то вам нужен провод micro HDMI-HDMI <img src="https://i.imgur.com/yJT8veQ.jpg" height="100">. 
+<div align="center">Если HDMI <img src="https://i.imgur.com/Dri4ET1.png" height="100">, то вам нужен провод micro HDMI-HDMI <img src="https://i.imgur.com/yJT8veQ.jpg" height="100">. 
 Если монитор у вас старый и разъем у него VGA <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/SVGA_port.jpg/1200px-SVGA_port.jpg" height="100">, то кроме провода micro HDMI-HDMI вам понадобится переходник hdmi-VGA. Все это можно купить в том же магазине.</div>
 
 5. Мышка и клавиатура. Оба должны подключаться по USB <img src="https://i.imgur.com/4n2uyX0.png" height="100">
