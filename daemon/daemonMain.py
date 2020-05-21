@@ -26,7 +26,7 @@ if __name__ == "__main__":
                     return 'err'
         return 'ok'
     def runProcess():
-        os.popen('sh /home/pi/autorun.sh')
+        os.popen('sh ~/autorun.sh')
         return 'ok'
     def osRestart():
         os.system("sudo reboot")
