@@ -21,7 +21,9 @@ if __name__ == "__main__":
     #pl.start()
     
     sstory = MpvSimple('sstory')
-    
+    sstory.rightChannel=False
+    sstory.leftChannel=False
+
     def fadeBackgroundAndPlay():
         sstory.fade(1)
         def playStory(x):

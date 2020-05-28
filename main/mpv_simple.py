@@ -22,8 +22,8 @@ class MpvSimple:
         self.player.geometry='500x500+700+500'
         self.fadingDelta=0
         self.fadingF=0.05
-        self.rightChannel=False
-        self.leftChannel=False
+        self.rightChannel=True
+        self.leftChannel=True
 
         #player.fullscreen=True
         #player.fs_screen=0
@@ -83,7 +83,7 @@ class MpvSimple:
 
         
     def play(self,filename:str):
-        logging.debug('Player ' + self.caller.name + ' begins playing file ' + filename)
+        #logging.debug('Player ' + self.caller.name + ' begins playing file ' + filename)
         self.setBrightness(1)
         self.fadingDelta=0
         self.player.loadfile(filename)
@@ -192,24 +192,4 @@ class MpvSimple:
         # 05:37:56.015: function test.start_file not found - skipping
         # 05:37:56.016: running function test.end_file args "{'event_id': 7, 'error': 0, 'reply_userdata': 0, 'event': {'reason': 2, 'error': 0}}", 'bird.avi', 0
         # 05:37:56.016: function test.start_file not found - skipping
-        
-class LoopPlayer:
-    def __init__(self, name:str):
-        self.names = []
-        self.splayer = MpvSimple(name)
-        self.caller=FunctionCaller(name)        
-
-        def next(filename):
-            ind = self.names.index(filename)
-            if ind==len(self.names)-1:
-                newInd=0
-            else:
-                newInd=ind+1
-            self.splayer.player.loadfile(self.names[newInd])
-            self.caller.runFunction('end_file',str(self.splayer.player.filename))
-        self.splayer.caller.on_end_file(next)          
-          
-    def start(self,i:int = 0):
-        self.splayer.player.loadfile(self.names[i])
-
-            
+                    

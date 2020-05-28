@@ -7,7 +7,7 @@ auto_continue_multiline=true
 final_new_line=true
 ensure_convert_new_lines=false
 strip_trailing_spaces=false
-replace_tabs=true
+replace_tabs=false
 
 [indentation]
 indent_width=4
@@ -18,8 +18,8 @@ detect_indent_width=false
 indent_mode=2
 
 [project]
-name=mpvPlayer
-base_path=/home/pi/main/
+name=player
+base_path=/home/pi/main-dev/main/
 description=
 file_patterns=
 
@@ -28,12 +28,20 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=4
-FILE_NAME_0=798;Python;0;EUTF-8;0;1;0;%2Fhome%2Fpi%2Fmain%2Ffunction_caller.py;0;4
-FILE_NAME_1=59;Python;0;EUTF-8;0;1;0;%2Fhome%2Fpi%2Fmain%2FMain.py;0;4
-FILE_NAME_2=0;None;0;EUTF-8;1;1;0;%2Fhome%2Fpi%2Fmain%2FPipfile;0;4
-FILE_NAME_3=347;Python;0;EUTF-8;0;1;0;%2Fhome%2Fpi%2Fmain%2Ftcp_receiver.py;0;4
-FILE_NAME_4=194;Python;0;EUTF-8;1;1;0;%2Fhome%2Fpi%2Fmain%2Fmpv_simple.py;0;4
+current_page=11
+FILE_NAME_0=1466;Python;0;EUTF-8;0;1;0;%2Fhome%2Fpi%2Fmain-dev%2Fmain%2Ffunction_caller.py;0;4
+FILE_NAME_1=247;Python;0;EUTF-8;0;1;0;%2Fhome%2Fpi%2Fmain-dev%2Fmain%2FMain.py;0;4
+FILE_NAME_2=646;Python;0;EUTF-8;0;1;0;%2Fhome%2Fpi%2Fmain-dev%2Fmain%2FMain_sstory.py;0;4
+FILE_NAME_3=814;Python;0;EUTF-8;0;1;0;%2Fhome%2Fpi%2Fmain-dev%2Fmain%2Fmpv_simple.py;0;8
+FILE_NAME_4=0;None;0;EUTF-8;1;1;0;%2Fhome%2Fpi%2Fmain-dev%2Fmain%2Fplayer.geany;0;4
+FILE_NAME_5=463;Python;0;EUTF-8;0;1;0;%2Fhome%2Fpi%2Fmain-dev%2Fmain%2Ftcp_receiver.py;0;8
+FILE_NAME_6=158;None;0;EUTF-8;1;1;0;%2Fhome%2Fpi%2Fmain-dev%2Fmain%2FPipfile;0;4
+FILE_NAME_7=74;Python;0;EUTF-8;0;1;0;%2Fhome%2Fpi%2Fmain-dev%2Fmain%2Ftest_function_caller.py;0;4
+FILE_NAME_8=37;Conf;0;EUTF-8;0;1;0;%2Fhome%2Fpi%2Fmain-dev%2Fmain%2Fpytest.ini;0;4
+FILE_NAME_9=205;Python;0;EUTF-8;0;1;0;%2Fhome%2Fpi%2Fmain-dev%2Fmain%2Floop_player.py;0;4
+FILE_NAME_10=194;Python;0;EUTF-8;0;1;0;%2Fhome%2Fpi%2Fmain-dev%2Fmain%2Ftcp_client.py;0;4
+FILE_NAME_11=544;Python;0;EUTF-8;0;1;0;%2Fhome%2Fpi%2Fmain-dev%2Fmain%2Ftcp_protocol.py;0;4
+FILE_NAME_12=504;Python;0;EUTF-8;0;1;0;%2Fhome%2Fpi%2Fmain-dev%2Fmain%2Ftest_tcp_protocol.py;0;4
 
 [VTE]
 last_dir=/home/pi

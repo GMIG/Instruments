@@ -1,10 +1,11 @@
 import mpv
 import logging
 
-from mpv_simple import MpvSimple
-from mpv_simple import LoopPlayer
+#from mpv_simple import MpvSimple
+from loop_player import LoopPlayer
 from function_caller import FunctionCaller
-from tcp_receiver import TCPReceiver,TCPClient
+from tcp_receiver import TCPReceiver
+from tcp_client import TCPClient
 
 from twisted.internet import reactor
 from pynput import keyboard
@@ -23,8 +24,9 @@ if __name__ == "__main__":
     #pl.names.append('sp.jpeg')
     #pl.start()
     logging.debug(sys.argv[1])
-    vid = LoopPlayer('vid')
+    vid = LoopPlayer('player')
     vid.names.append('drop.avi')
+    vid.names.append('bird.avi')
     vid.start()
     
     if sys.argv[1] == 'host':
@@ -32,14 +34,15 @@ if __name__ == "__main__":
         fact = TCPReceiver(8007)
         fact.parts[main.name]=main
         fact.begin()
-        def sendSync():
-            fact.sendAll('cl.sync()')
+        def sendSync(fn):
+            fact.sendAll('cl.sync('+fn+')')
         vid.caller.on_end_file(sendSync)
     if sys.argv[1] == 'cl':
         cl = FunctionCaller('cl')
-        def restartPlayer():
-            vid.start()
-        cl.on_sync(restartPlayer)
+        def restartPlayer(fn):
+            vid.next(fn)
+            return 'cl:ok'
+        cl.on_sync(vid.next)
         fact = TCPClient('127.0.0.1',8007)
         fact.parts[cl.name]=cl
         fact.begin()
